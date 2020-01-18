@@ -5,7 +5,8 @@ public class CardsGame {
     private static int player2score;
     private static char[] p1cards;
     private static char[] p2cards;
-    private static int pendingRounds;
+    private static int currentRound;
+    private static int maxRounds;
 
 
 
@@ -17,16 +18,16 @@ public class CardsGame {
 
     private static void initPlayersScoreMarkerAndCards(char[] player1cards,char[] player2cards) {
         player1score=0; player2score=0;
-        p1cards=player1cards;
-        p2cards= player2cards;
-        pendingRounds=p1cards.length;
+        p1cards=player1cards; p2cards= player2cards;
+        currentRound=0;
+        maxRounds= p1cards.length;
     }
 
     private static void calculatePlayersScore() {
-        while(pendingRounds-->0){
+        while(currentRound++<maxRounds){
             if (currentRoundCardsAreTheSame()){
                 drawRound();
-            } else if (player1CurrentRoundCardRankIsBiggerThanPlayer2Card()){
+            } else if (player1CurrentRoundCardRankIsBiggerThanPlayer2CurrentRoundCard()){
                 player1WinsRound();
             } else{
                 player2WinsRound();
@@ -34,16 +35,20 @@ public class CardsGame {
         }
     }
 
+    private static String gameScoreMarker() {
+        return player1score + "-" + player2score;
+    }
+
     private static boolean currentRoundCardsAreTheSame() {
-        return cardsAreTheSame(getPlayer1CurrentRoundCard(pendingRounds), getPlayer2CurrentRoundCard(pendingRounds));
+        return cardsAreTheSame(getPlayer1CurrentRoundCard(currentRound), getPlayer2CurrentRoundCard(currentRound));
     }
 
-    private static char getPlayer2CurrentRoundCard(int round) {
-        return p2cards[round];
+    private static char getPlayer2CurrentRoundCard(int currentRound) {
+        return p2cards[currentRound-1];
     }
 
-    private static char getPlayer1CurrentRoundCard(int round) {
-        return p1cards[round];
+    private static char getPlayer1CurrentRoundCard(int currentRound) {
+        return p1cards[currentRound-1];
     }
 
     private static void player2WinsRound() {
@@ -59,13 +64,8 @@ public class CardsGame {
         player2score++;
     }
 
-    private static String gameScoreMarker() {
-        return player1score + "-" + player2score;
-    }
-
-
-    private static boolean player1CurrentRoundCardRankIsBiggerThanPlayer2Card() {
-        return cardRank(getPlayer1CurrentRoundCard(pendingRounds)) > cardRank(getPlayer2CurrentRoundCard(pendingRounds));
+    private static boolean player1CurrentRoundCardRankIsBiggerThanPlayer2CurrentRoundCard() {
+        return cardRank(getPlayer1CurrentRoundCard(currentRound)) > cardRank(getPlayer2CurrentRoundCard(currentRound));
     }
 
     private static int cardRank(char player1card) {
