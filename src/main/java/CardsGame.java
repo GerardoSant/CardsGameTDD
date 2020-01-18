@@ -10,12 +10,12 @@ public class CardsGame {
 
 
     public static String score(char[] player1cards, char[] player2cards){
-        setPlayersScoreMarkerAndCards(player1cards, player2cards);
+        initPlayersScoreMarkerAndCards(player1cards, player2cards);
         calculatePlayersScore();
         return gameScoreMarker();
     }
 
-    private static void setPlayersScoreMarkerAndCards(char[] player1cards,char[] player2cards) {
+    private static void initPlayersScoreMarkerAndCards(char[] player1cards,char[] player2cards) {
         player1score=0; player2score=0;
         p1cards=player1cards;
         p2cards= player2cards;
@@ -24,14 +24,18 @@ public class CardsGame {
 
     private static void calculatePlayersScore() {
         while(pendingRounds-->0){
-            if (cardsAreTheSame(getPlayer1CurrentRoundCard(pendingRounds), getPlayer2CurrentRoundCard(pendingRounds))){
+            if (currentRoundCardsAreTheSame()){
                 drawRound();
-            } else if (player1CardRankIsBiggerThanPlayer2Card(getPlayer1CurrentRoundCard(pendingRounds), getPlayer2CurrentRoundCard(pendingRounds))){
+            } else if (player1CurrentRoundCardRankIsBiggerThanPlayer2Card()){
                 player1WinsRound();
             } else{
                 player2WinsRound();
             }
         }
+    }
+
+    private static boolean currentRoundCardsAreTheSame() {
+        return cardsAreTheSame(getPlayer1CurrentRoundCard(pendingRounds), getPlayer2CurrentRoundCard(pendingRounds));
     }
 
     private static char getPlayer2CurrentRoundCard(int round) {
@@ -60,12 +64,8 @@ public class CardsGame {
     }
 
 
-    private static int numberOfCards(char[] player1cards) {
-        return player1cards.length;
-    }
-
-    private static boolean player1CardRankIsBiggerThanPlayer2Card(char player1card, char player2card) {
-        return cardRank(player1card) > cardRank(player2card);
+    private static boolean player1CurrentRoundCardRankIsBiggerThanPlayer2Card() {
+        return cardRank(getPlayer1CurrentRoundCard(pendingRounds)) > cardRank(getPlayer2CurrentRoundCard(pendingRounds));
     }
 
     private static int cardRank(char player1card) {
