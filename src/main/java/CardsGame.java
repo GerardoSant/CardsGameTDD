@@ -19,21 +19,17 @@ public class CardsGame {
     private static void initPlayersScoreMarkerAndCards(char[] player1cards,char[] player2cards) {
         player1score=0; player2score=0;
         p1cards=player1cards; p2cards= player2cards;
-        currentRound=0;
-        maxRounds= p1cards.length;
+        currentRound=0; maxRounds= p1cards.length;
     }
 
     private static void calculatePlayersScore() {
         while(currentRound++<maxRounds){
-            if (currentRoundCardsAreTheSame()){
-                drawRound();
-            } else if (player1CurrentRoundCardRankIsBiggerThanPlayer2CurrentRoundCard()){
-                player1WinsRound();
-            } else{
-                player2WinsRound();
-            }
+            if (currentRoundCardsAreTheSame()) { drawRound(); continue; }
+            if (player1CurrentRoundCardRankIsBiggerThanPlayer2CurrentRoundCard()) { player1WinsRound(); continue;}
+            else player2WinsRound();
         }
     }
+
 
     private static String gameScoreMarker() {
         return player1score + "-" + player2score;
@@ -72,7 +68,7 @@ public class CardsGame {
         return cardRank.indexOf(player1card);
     }
 
-    private static boolean cardsAreTheSame(char player1card, char player2card) {
-        return player1card == player2card;
+    private static boolean cardsAreTheSame(char card1, char card2) {
+        return card1 == card2;
     }
 }
